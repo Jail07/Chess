@@ -22,50 +22,87 @@ public class Goose extends ChessPiece {
 
         Position p = new Position(0,0);
 
-        //above
-        p.setValues(position.getRow() - 2, position.getColumn());
-        if(getBoard().positionExists(p) && canMove(p)){
-            mat[p.getRow()][p.getColumn()] = true;
+
+        if (getColor().equals(Color.WHITE)) {
+            //above
+            p.setValues(position.getRow() - 2, position.getColumn());
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
+
+    //        //below
+    //        p.setValues(position.getRow() + 1, position.getColumn());
+    //        if(getBoard().positionExists(p) && canMove(p)){
+    //            mat[p.getRow()][p.getColumn()] = true;
+    //        }
+
+            //left
+            p.setValues(position.getRow(), position.getColumn() - 2);
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
+
+            //right
+            p.setValues(position.getRow(), position.getColumn() + 2);
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
+
+            p.setValues(position.getRow() - 1, position.getColumn() - 1);
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
+
+    //        p.setValues(position.getRow() + 1, position.getColumn() + 1);
+    //        if(getBoard().positionExists(p) && canMove(p)){
+    //            mat[p.getRow()][p.getColumn()] = true;
+    //        }
+
+            p.setValues(position.getRow() + 1, position.getColumn() - 1);
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
+
+            //southeast
+            p.setValues(position.getRow() - 1, position.getColumn() + 1);
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
+        } else if (getColor().equals(Color.BLACK)) {
+            //above
+            p.setValues(position.getRow() + 2, position.getColumn());
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
+
+            //left
+            p.setValues(position.getRow(), position.getColumn() - 2);
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
+
+            //right
+            p.setValues(position.getRow(), position.getColumn() + 2);
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
+
+            p.setValues(position.getRow() + 1, position.getColumn() + 1);
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
+
+            p.setValues(position.getRow() + 1, position.getColumn() - 1);
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
+
+            //southeast
+            p.setValues(position.getRow() - 1, position.getColumn() + 1);
+            if(getBoard().positionExists(p) && canMove(p)){
+                mat[p.getRow()][p.getColumn()] = true;
+            }
         }
-
-//        //below
-//        p.setValues(position.getRow() + 1, position.getColumn());
-//        if(getBoard().positionExists(p) && canMove(p)){
-//            mat[p.getRow()][p.getColumn()] = true;
-//        }
-
-        //left
-        p.setValues(position.getRow(), position.getColumn() - 2);
-        if(getBoard().positionExists(p) && canMove(p)){
-            mat[p.getRow()][p.getColumn()] = true;
-        }
-
-        //right
-        p.setValues(position.getRow(), position.getColumn() + 2);
-        if(getBoard().positionExists(p) && canMove(p)){
-            mat[p.getRow()][p.getColumn()] = true;
-        }
-
-        p.setValues(position.getRow() - 1, position.getColumn() - 1);
-        if(getBoard().positionExists(p) && canMove(p)){
-            mat[p.getRow()][p.getColumn()] = true;
-        }
-
-        p.setValues(position.getRow() + 1, position.getColumn() + 1);
-        if(getBoard().positionExists(p) && canMove(p)){
-            mat[p.getRow()][p.getColumn()] = true;
-        }
-
-        p.setValues(position.getRow() + 1, position.getColumn() - 1);
-        if(getBoard().positionExists(p) && canMove(p)){
-            mat[p.getRow()][p.getColumn()] = true;
-        }
-
-//        //southeast
-//        p.setValues(position.getRow() - 1, position.getColumn() + 1);
-//        if(getBoard().positionExists(p) && canMove(p)){
-//            mat[p.getRow()][p.getColumn()] = true;
-//        }
 
         return mat;
     }

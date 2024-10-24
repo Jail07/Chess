@@ -10,7 +10,11 @@ import pieces.*;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
+import chess.utils.Color;
+import chess.ChessPiece;
+
 
 public class ChessMatch {
     private ChessPiece enPassantVulnerable;
@@ -95,15 +99,6 @@ public class ChessMatch {
         } else {
             nextTurn();
         }
-
-        // #specialmove en passant
-        if (movedPiece instanceof Pawn && (target.getRow() == source.getRow() - 2 || target.getRow() == source.getRow() + 2)) {
-            enPassantVulnerable = movedPiece;
-        }
-        else {
-            enPassantVulnerable = null;
-        }
-
         return (ChessPiece) capturedPiece;
     }
 
@@ -134,6 +129,7 @@ public class ChessMatch {
 
     private void validateSourcePosition(Position position) {
         if (!board.thereIsAPiece(position)) {
+            System.out.println(position);
             throw new ChessException("На исходной позиции нет фигуры.");
         }
         if (currentPlayer != ((ChessPiece) board.piece(position)).getColor()) {
@@ -168,6 +164,7 @@ public class ChessMatch {
             board.placePiece(rook,targetT);
             rook.increaseMoveCount();
         }
+
         //#Special move castling king side rook
         else if(p instanceof JK && target.getColumn() == source.getColumn() - 2){
             Position sourceT = new Position(source.getRow(), source.getColumn() - 4);
@@ -176,19 +173,55 @@ public class ChessMatch {
             board.placePiece(rook,targetT);
             rook.increaseMoveCount();
         }
-        // #specialmove en passant
-        if (p instanceof Pawn) {
-            if (source.getColumn() != target.getColumn() && capturedPiece == null) {
-                Position pawnPosition;
-                if (p.getColor() == Color.WHITE) {
-                    pawnPosition = new Position(target.getRow() + 1, target.getColumn());
+        // #specialmove Goose
+
+        if (p instanceof Goose){
+            Position placePieceS = new Position(source.getRow(), source.getColumn());
+            Position placePieceT = new Position(target.getRow(), target.getColumn());
+            Position placePiece = new Position(source.getRow() - target.getRow(), source.getColumn() - target.getColumn());
+
+            System.out.println(placePieceS);
+            System.out.println(placePieceT);
+            System.out.println(placePiece);
+
+            ChessPiece movedPiece = (ChessPiece)board.piece(target);
+            Boolean action = false;
+
+            if (placePiece.getColumn() == 0) {
+                if (movedPiece.getColor() == Color.WHITE) {
+                    placePiece = new Position(placePieceS.getRow()-1, placePieceS.getColumn());
+                    action = board.thereIsAPiece(placePiece);
+                } else if (movedPiece.getColor() == Color.BLACK) {
+                    placePiece = new Position(placePieceS.getRow()+1, placePieceS.getColumn());
+                    action = board.thereIsAPiece(placePiece);
                 }
-                else {
-                    pawnPosition = new Position(target.getRow() - 1, target.getColumn());
+            }else if (placePiece.getRow() == 0) {
+                if (placePieceS.getColumn() > placePieceT.getColumn()) {
+                    placePiece = new Position(placePieceS.getRow(), placePieceS.getColumn()-1);
+                    action = board.thereIsAPiece(placePiece);
+
+                } else if (placePieceS.getColumn() < placePieceT.getColumn()) {
+                    placePiece = new Position(placePieceS.getRow(), placePieceS.getColumn()+1);
+                    action = board.thereIsAPiece(placePiece);
                 }
-                capturedPiece = board.removePiece(pawnPosition);
-                capturedPieces.add(capturedPiece);
-                piecesOnTheBoard.remove(capturedPiece);
+            }
+
+            if (action) {
+                Random random = new Random();
+                Integer dice = random.nextInt(6);
+                System.out.println("Под вами была фигура, выпало число: " + dice);
+                if (dice%2==0) {
+                    System.out.println("Фигура съедена " + placePiece);
+
+                    capturedPiece = board.removePiece(placePiece);
+                    if (capturedPiece != null) {
+                        piecesOnTheBoard.remove(capturedPiece);
+                        capturedPieces.add(capturedPiece);
+                    }
+
+                } else {
+                    System.out.println("Фигура осталась жива");
+                }
             }
         }
 
@@ -220,21 +253,6 @@ public class ChessMatch {
             ChessPiece rook = (ChessPiece)board.removePiece(targetT);
             board.placePiece(rook,sourceT);
             rook.decreaseMoveCount();
-        }
-
-        // #specialmove en passant
-        if (p instanceof Pawn) {
-            if (source.getColumn() != target.getColumn() && captured == enPassantVulnerable) {
-                ChessPiece pawn = (ChessPiece)board.removePiece(target);
-                Position pawnPosition;
-                if (p.getColor() == Color.WHITE) {
-                    pawnPosition = new Position(3, target.getColumn());
-                }
-                else {
-                    pawnPosition = new Position(4, target.getColumn());
-                }
-                board.placePiece(pawn, pawnPosition);
-            }
         }
     }
 

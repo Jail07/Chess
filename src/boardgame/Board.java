@@ -80,7 +80,7 @@ public class Board {
     // Проверяет, есть ли фигура на позиции
     public boolean thereIsAPiece(Position position) {
         if (!positionExists(position)) {
-            throw new BoardException("Позиция находится за пределами доски");
+            return true;
         }
         return piece(position) != null;
     }

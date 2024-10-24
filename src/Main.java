@@ -38,7 +38,7 @@ public class Main {
                     captureChessPieces.add(capturedPiece);
                 }
                 if(chessMatch.getPromoted() != null){
-                    System.out.println("Если фигура была превращена, выбрать новую фигуру (Ферзь/Ладья/Конь/Слон).");
+                    System.out.println("Выберите новую фигуру (Ферзь/Ладья/Конь/Слон).");
                     String type = sc.nextLine();
                     chessMatch.replacepromotedPiece(type);
                 }
