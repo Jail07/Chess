@@ -44,10 +44,6 @@ public class ChessMatch {
         return checkMate;
     }
 
-    public ChessPiece getEnPassantVulnerable() {
-        return enPassantVulnerable;
-    }
-
     public ChessPiece getPromoted() {
         return promoted;
     }
@@ -151,12 +147,17 @@ public class ChessMatch {
         p.increaseMoveCount();
         Piece capturedPiece = board.removePiece(target);
         board.placePiece(p, target);
-        if (capturedPiece != null) {
+        if (capturedPiece != null && !(p instanceof JK)) {
             piecesOnTheBoard.remove(capturedPiece);
             capturedPieces.add(capturedPiece);
         }
+        if(p instanceof JK){
+            board.placePiece(capturedPiece, source);
+            capturedPiece = null;
+        }
 
-        //#Special move castling king side rook
+
+            //#Special move castling king side rook
         if(p instanceof JK && target.getColumn() == source.getColumn() + 2){
             Position sourceT = new Position(source.getRow(), source.getColumn() + 3);
             Position targetT = new Position(source.getRow(), source.getColumn() + 1);
@@ -180,9 +181,9 @@ public class ChessMatch {
             Position placePieceT = new Position(target.getRow(), target.getColumn());
             Position placePiece = new Position(source.getRow() - target.getRow(), source.getColumn() - target.getColumn());
 
-            System.out.println(placePieceS);
-            System.out.println(placePieceT);
-            System.out.println(placePiece);
+//            System.out.println(placePieceS);
+//            System.out.println(placePieceT);
+//            System.out.println(placePiece);
 
             ChessPiece movedPiece = (ChessPiece)board.piece(target);
             Boolean action = false;
@@ -208,7 +209,7 @@ public class ChessMatch {
 
             if (action) {
                 Random random = new Random();
-                Integer dice = random.nextInt(6);
+                Integer dice = random.nextInt(1,6);
                 System.out.println("Под вами была фигура, выпало число: " + dice);
                 if (dice%2==0) {
                     System.out.println("Фигура съедена " + placePiece);
